@@ -1,0 +1,6 @@
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Model\bin\Debug\ShipTransporations.Model.dll.config
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Model\bin\Debug\ShipTransporations.Model.dll
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Model\bin\Debug\ShipTransporations.Model.pdb
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Model\obj\Debug\ShipTransporations.Model.csprojResolveAssemblyReference.cache
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Model\obj\Debug\ShipTransporations.Model.dll
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Model\obj\Debug\ShipTransporations.Model.pdb
