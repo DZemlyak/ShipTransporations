@@ -14,7 +14,7 @@ namespace ShipTransportations.Model.Model
             get { return _portId; }
             set {
                 if (RepositoryHelper.PortRepository.ReadAll().All(a => a.PortId != value))
-                    throw new Exception(string.Format("Can't find specified PortID : {0}.", value));
+                    throw new Exception(string.Format("\nCan't find specified PortID : {0}.", value));
                 _portId = value;
             }
         }
@@ -23,19 +23,6 @@ namespace ShipTransportations.Model.Model
         public DateTime CreateDate { get; set; }
         public int MaxDistance { get; set; }
         public int CrewSize { get; set; }
-
-        public Ship(int shipId, int portId, int captainId, int number, int capacity, DateTime createDate,
-            int maxDistance, int crewSize)
-        {
-            ShipId = shipId;
-            PortId = portId;
-            Number = number;
-            Capacity = capacity;
-            CreateDate = createDate;
-            MaxDistance = maxDistance;
-            CrewSize = crewSize;
-        }
-        public Ship() { }
 
         public override string ToString() {
             return string.Format("\nShipId: {0}\nPortId: {1}\nNumber: {2}\nCapacity: {3}\nCreateDate: {4}" +

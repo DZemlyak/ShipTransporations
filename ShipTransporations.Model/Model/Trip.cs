@@ -16,7 +16,7 @@ namespace ShipTransportations.Model.Model
             get { return _captainId; }
             set {
                 if (RepositoryHelper.CaptainRepository.ReadAll().All(a => a.CaptainId != value))
-                    throw new Exception(string.Format("Can't find specified CaptainID : {0}.", value));
+                    throw new Exception(string.Format("\nCan't find specified CaptainID : {0}.", value));
                 _captainId = value;
             }
         }
@@ -25,7 +25,7 @@ namespace ShipTransportations.Model.Model
             get { return _shipId; }
             set {
                 if (RepositoryHelper.ShipRepository.ReadAll().All(a => a.ShipId != value))
-                    throw new Exception(string.Format("Can't find specified ShipID : {0}.", value));
+                    throw new Exception(string.Format("\nCan't find specified ShipID : {0}.", value));
                 _shipId = value;
             }
         }
@@ -34,7 +34,7 @@ namespace ShipTransportations.Model.Model
             get { return _portFromId; }
             set {
                 if (RepositoryHelper.PortRepository.ReadAll().All(a => a.PortId != value))
-                    throw new Exception(string.Format("Can't find specified PortFromID : {0}.", value));
+                    throw new Exception(string.Format("\nCan't find specified PortFromID : {0}.", value));
                 _portFromId = value;
             }
         }
@@ -42,25 +42,12 @@ namespace ShipTransportations.Model.Model
             get { return _portToId; }
             set {
                 if (RepositoryHelper.PortRepository.ReadAll().All(a => a.PortId != value))
-                    throw new Exception(string.Format("Can't find specified PortToID : {0}.", value));
+                    throw new Exception(string.Format("\nCan't find specified PortToID : {0}.", value));
                 _portToId = value;
             }
         }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-
-        public Trip(int tripId, int captainId, int shipId, int portidFrom, int portIdTo, DateTime startDate,
-            DateTime endDate)
-        {
-            TripId = tripId;
-            CaptainId = captainId;
-            ShipId = shipId;
-            PortIdFrom = portidFrom;
-            PortIdTo = portIdTo;
-            StartDate = startDate;
-            EndDate = endDate;
-        }
-        public Trip() { }
 
         public override string ToString() {
             return string.Format("\nTripID: {0}\nCaptainId: {1}\nShipId: {2}\nPortIdFrom: {3}\nPortIdTo: {4}" +

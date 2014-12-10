@@ -36,7 +36,6 @@ namespace ShipTransportations.Model.Repository
                             }
                         };
                         cmd.Parameters.AddRange(parameters);
-                        cn.Open();
                         cmd.ExecuteNonQuery();
                     }
                 }

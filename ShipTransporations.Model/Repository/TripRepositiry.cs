@@ -132,7 +132,28 @@ namespace ShipTransportations.Model.Repository
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            using (var cn = new SqlConnection(RepositoryHelper.ConnStr)) {
+                try {
+                    using (var cmd = new SqlCommand("DeleteTrip", cn)) {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(
+                            new SqlParameter {
+                                ParameterName = "@TripID",
+                                Value = id,
+                                SqlDbType = SqlDbType.Int,
+                                Direction = ParameterDirection.Input
+                        });
+                        cn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.Message);
+                }
+                finally {
+                    cn.Close();
+                }
+            }
         }
 
         public List<Trip> ReadAll()
