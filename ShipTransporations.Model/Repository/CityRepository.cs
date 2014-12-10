@@ -70,7 +70,27 @@ namespace ShipTransportations.Model.Repository
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            using (var cn = new SqlConnection(RepositoryHelper.ConnStr)) {
+                try {
+                    using (var cmd = new SqlCommand("DeleteCity", cn)) {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(
+                            new SqlParameter {
+                                ParameterName = "@CityID",
+                                Value = id,
+                                SqlDbType = SqlDbType.Int,
+                                Direction = ParameterDirection.Input
+                        });
+                        cn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception) { }
+                finally {
+                    cn.Close();
+                    throw new Exception("Can't delete city where port is in use.");
+                }
+            }
         }
 
         public List<City> ReadAll()

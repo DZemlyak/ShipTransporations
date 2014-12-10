@@ -6,13 +6,13 @@ namespace ShipTransportations.Model.Model
 {
     public class Captain
     {
-        private int _shipId;
+        private int? _shipId;
         public int CaptainId { get; set; }
 
-        public int ShipId {
+        public int? ShipId {
             get { return _shipId; }
             set {
-                if (RepositoryHelper.ShipRepository.ReadAll().All(a => a.ShipId != value))
+                if (value != null && RepositoryHelper.ShipRepository.ReadAll().All(a => a.ShipId != value))
                     throw new Exception(string.Format("\nCan't find specified ShipID : {0}.", value));               
                 _shipId = value;
             }

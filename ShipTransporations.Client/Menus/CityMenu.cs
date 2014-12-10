@@ -11,7 +11,7 @@ namespace ShipTransportations.Client
             menu = new Dictionary<string, MenuList> {
                 {"Add City", AddCity},
                 {"Update City", UpdateCity},
-                //{"Delete City", DeleteCity},
+                {"Delete City", DeleteCity},
                 {"Show City", ShowCity},
                 {"Show all Cities", ShowAllCities}
             };
@@ -48,6 +48,28 @@ namespace ShipTransportations.Client
                 city = ObjectCreator.CreateCity(city);
                 RepositoryHelper.CityRepository.Update(city);
                 Console.WriteLine("\nCity updated.");
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+            }
+            finally {
+                Console.WriteLine("\nPress any button.");
+                Console.ReadKey();
+            }
+        }
+
+        private static void DeleteCity(Dictionary<string, MenuList> menu)
+        {
+            try {
+                int id;
+                Console.Write("Enter City ID: ");
+                var temp = Console.ReadLine();
+                while (!int.TryParse(temp, out id)) {
+                    Console.Write("Incorrect ID. Type again: ");
+                    temp = Console.ReadLine();
+                }
+                RepositoryHelper.CityRepository.Delete(id);
+                Console.WriteLine("\nCity type deleted.");
             }
             catch (Exception ex) {
                 Console.WriteLine(ex.Message);

@@ -11,7 +11,7 @@ namespace ShipTransportations.Client
             menu = new Dictionary<string, MenuList> {
                 {"Add Cargo Type", AddCargoType},
                 {"Update Cargo Type", UpdateCargoType},
-                //{"Delete Cargo Type", DeleteCargoType},
+                {"Delete Cargo Type", DeleteCargoType},
                 {"Show Cargo Type", ShowCargoType},
                 {"Show all Cargo Types", ShowAllCargoTypes}
             };
@@ -57,7 +57,29 @@ namespace ShipTransportations.Client
                 Console.ReadKey();
             }
         }
-
+        
+        private static void DeleteCargoType(Dictionary<string, MenuList> menu)
+        {
+            try {
+                int id;
+                Console.Write("Enter Cargo Type ID: ");
+                var temp = Console.ReadLine();
+                while (!int.TryParse(temp, out id)) {
+                    Console.Write("Incorrect ID. Type again: ");
+                    temp = Console.ReadLine();
+                }
+                RepositoryHelper.CargoTypesRepository.Delete(id);
+                Console.WriteLine("\nCargo type deleted.");
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+            }
+            finally {
+                Console.WriteLine("\nPress any button.");
+                Console.ReadKey();
+            }
+        }
+        
         private static void ShowCargoType(Dictionary<string, MenuList> menu)
         {
             try {

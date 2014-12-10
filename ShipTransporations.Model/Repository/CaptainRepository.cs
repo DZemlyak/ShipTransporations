@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
 using ShipTransportations.Model.Model;
 
 namespace ShipTransportations.Model.Repository
@@ -96,7 +95,28 @@ namespace ShipTransportations.Model.Repository
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            using (var cn = new SqlConnection(RepositoryHelper.ConnStr)) {
+                try {
+                    using (var cmd = new SqlCommand("DeleteCaptain", cn)) {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(
+                            new SqlParameter {
+                                ParameterName = "@CaptainID",
+                                Value = id,
+                                SqlDbType = SqlDbType.Int,
+                                Direction = ParameterDirection.Input
+                        });
+                        cn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.Message);
+                }
+                finally {
+                    cn.Close();
+                }
+            }
         }
 
         public List<Captain> ReadAll()
@@ -109,9 +129,14 @@ namespace ShipTransportations.Model.Repository
                         cn.Open();
                         using (var dr = cmd.ExecuteReader()) {
                             while (dr.Read()) {
+                                int? sId;
+                                if (string.IsNullOrEmpty(dr["ShipID"].ToString()))
+                                    sId = null;
+                                else
+                                    sId = int.Parse(dr["ShipID"].ToString());
                                 captains.Add(new Captain {
                                     CaptainId = int.Parse(dr["CaptainID"].ToString()),
-                                    ShipId = int.Parse(dr["ShipID"].ToString()),
+                                    ShipId = sId,
                                     FirstName = dr["FirstName"].ToString(),
                                     LastName = dr["LastName"].ToString(),
                                 });
@@ -145,10 +170,15 @@ namespace ShipTransportations.Model.Repository
                         cn.Open();
                         using (var dr = cmd.ExecuteReader()) {
                             while (dr.Read()) {
+                                int? sId;
+                                if (string.IsNullOrEmpty(dr["ShipID"].ToString()))
+                                    sId = null;
+                                else
+                                    sId = int.Parse(dr["ShipID"].ToString());
                                 captain.CaptainId = int.Parse(dr["CaptainID"].ToString());
                                 captain.FirstName = dr["FirstName"].ToString();
                                 captain.LastName = dr["LastName"].ToString();
-                                captain.ShipId = int.Parse(dr["ShipID"].ToString());
+                                captain.ShipId = sId;
                             }
                         }
                     }

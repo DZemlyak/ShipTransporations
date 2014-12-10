@@ -71,7 +71,27 @@ namespace ShipTransportations.Model.Repository
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            using (var cn = new SqlConnection(RepositoryHelper.ConnStr)) {
+                try {
+                    using (var cmd = new SqlCommand("DeleteCargoType", cn)) {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(
+                            new SqlParameter {
+                                ParameterName = "@CargoTypeID",
+                                Value = id,
+                                SqlDbType = SqlDbType.Int,
+                                Direction = ParameterDirection.Input
+                        });
+                        cn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception) { }
+                finally {
+                    cn.Close();
+                    throw new Exception("Can't delete cargo type that is in use.");
+                }
+            }
         }
 
         public List<CargoType> ReadAll()

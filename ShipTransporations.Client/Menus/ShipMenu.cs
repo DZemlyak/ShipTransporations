@@ -11,7 +11,7 @@ namespace ShipTransportations.Client
             menu = new Dictionary<string, MenuList> {
                 {"Add Ship", AddShip},
                 {"Update Ship", UpdateShip},
-                //{"Delete Ship", DeleteShip},
+                {"Delete Ship", DeleteShip},
                 {"Show Ship", ShowShip},
                 {"Show all Ships", ShowAllShips}
             };
@@ -58,6 +58,28 @@ namespace ShipTransportations.Client
             }
         }
 
+        private static void DeleteShip(Dictionary<string, MenuList> menu)
+        {
+            try {
+                int id;
+                Console.Write("Enter Ship ID: ");
+                var temp = Console.ReadLine();
+                while (!int.TryParse(temp, out id)) {
+                    Console.Write("Incorrect ID. Type again: ");
+                    temp = Console.ReadLine();
+                }
+                RepositoryHelper.ShipRepository.Delete(id);
+                Console.WriteLine("\nShip deleted.");
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+            }
+            finally {
+                Console.WriteLine("\nPress any button.");
+                Console.ReadKey();
+            }
+        }
+        
         private static void ShowShip(Dictionary<string, MenuList> menu)
         {
             try {

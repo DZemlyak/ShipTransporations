@@ -132,7 +132,28 @@ namespace ShipTransportations.Model.Repository
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            using (var cn = new SqlConnection(RepositoryHelper.ConnStr)) {
+                try {
+                    using (var cmd = new SqlCommand("DeleteShip", cn)) {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(
+                            new SqlParameter {
+                                ParameterName = "@ShipID",
+                                Value = id,
+                                SqlDbType = SqlDbType.Int,
+                                Direction = ParameterDirection.Input
+                        });
+                        cn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.Message);
+                }
+                finally {
+                    cn.Close();
+                }
+            }
         }
 
         public List<Ship> ReadAll()
@@ -145,9 +166,14 @@ namespace ShipTransportations.Model.Repository
                         cn.Open();
                         using (var dr = cmd.ExecuteReader()) {
                             while (dr.Read()) {
+                                int? pId;
+                                if (string.IsNullOrEmpty(dr["PortID"].ToString()))
+                                    pId = null;
+                                else
+                                    pId = int.Parse(dr["PortID"].ToString());
                                 ships.Add(new Ship {
                                     ShipId = int.Parse(dr["ShipID"].ToString()),
-                                    PortId = int.Parse(dr["PortID"].ToString()),
+                                    PortId = pId,
                                     Number = int.Parse(dr["Number"].ToString()),
                                     Capacity = int.Parse(dr["Capacity"].ToString()),
                                     CreateDate = DateTime.Parse(dr["CreateDate"].ToString()),
@@ -184,8 +210,13 @@ namespace ShipTransportations.Model.Repository
                         cn.Open();
                         using (var dr = cmd.ExecuteReader()) {
                             while (dr.Read()) {
+                                int? pId;
+                                if (string.IsNullOrEmpty(dr["PortID"].ToString()))
+                                    pId = null;
+                                else
+                                    pId = int.Parse(dr["PortID"].ToString());
                                 ship.ShipId = int.Parse(dr["ShipID"].ToString());
-                                ship.PortId = int.Parse(dr["PortID"].ToString());
+                                ship.PortId = pId;
                                 ship.Number = int.Parse(dr["Number"].ToString());
                                 ship.Capacity = int.Parse(dr["Capacity"].ToString());
                                 ship.CreateDate = DateTime.Parse(dr["CreateDate"].ToString());

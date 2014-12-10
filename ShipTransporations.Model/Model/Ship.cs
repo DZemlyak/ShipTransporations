@@ -6,14 +6,14 @@ namespace ShipTransportations.Model.Model
 {
     public class Ship
     {
-        private int _portId;
+        private int? _portId;
 
         public int ShipId { get; set; }
-        public int PortId
+        public int? PortId
         {
             get { return _portId; }
             set {
-                if (RepositoryHelper.PortRepository.ReadAll().All(a => a.PortId != value))
+                if (value != null && RepositoryHelper.PortRepository.ReadAll().All(a => a.PortId != value))
                     throw new Exception(string.Format("\nCan't find specified PortID : {0}.", value));
                 _portId = value;
             }

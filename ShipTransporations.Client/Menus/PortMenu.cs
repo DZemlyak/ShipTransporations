@@ -11,7 +11,7 @@ namespace ShipTransportations.Client
             menu = new Dictionary<string, MenuList> {
                 {"Add Port", AddPort},
                 {"Update Port", UpdatePort},
-                //{"Delete Port", DeletePort},
+                {"Delete Port", DeletePort},
                 {"Show Port", ShowPort},
                 {"Show all Ports", ShowAllPorts}
             };
@@ -58,6 +58,28 @@ namespace ShipTransportations.Client
             }
         }
 
+        private static void DeletePort(Dictionary<string, MenuList> menu)
+        {
+            try {
+                int id;
+                Console.Write("Enter Port ID: ");
+                var temp = Console.ReadLine();
+                while (!int.TryParse(temp, out id)) {
+                    Console.Write("Incorrect ID. Type again: ");
+                    temp = Console.ReadLine();
+                }
+                RepositoryHelper.PortRepository.Delete(id);
+                Console.WriteLine("\nPort deleted.");
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+            }
+            finally {
+                Console.WriteLine("\nPress any button.");
+                Console.ReadKey();
+            }
+        }
+        
         private static void ShowPort(Dictionary<string, MenuList> menu)
         {
             try {

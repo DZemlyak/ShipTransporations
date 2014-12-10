@@ -166,12 +166,29 @@ namespace ShipTransportations.Model.Repository
                         cn.Open();
                         using (var dr = cmd.ExecuteReader()) {
                             while (dr.Read()) {
+                                int? cId, sId, pfId, ptId;
+                                if (string.IsNullOrEmpty(dr["CaptainID"].ToString()))
+                                    cId = null;
+                                else
+                                    cId = int.Parse(dr["CaptainID"].ToString());
+                                if (string.IsNullOrEmpty(dr["ShipID"].ToString()))
+                                    sId = null;
+                                else
+                                    sId = int.Parse(dr["ShipID"].ToString());
+                                if (string.IsNullOrEmpty(dr["PortFromID"].ToString()))
+                                    pfId = null;
+                                else
+                                    pfId = int.Parse(dr["PortFromID"].ToString());
+                                if (string.IsNullOrEmpty(dr["PortToID"].ToString()))
+                                    ptId = null;
+                                else
+                                    ptId = int.Parse(dr["PortToID"].ToString());
                                 trips.Add(new Trip {
                                     TripId = int.Parse(dr["TripID"].ToString()),
-                                    CaptainId = int.Parse(dr["CaptainID"].ToString()),
-                                    ShipId = int.Parse(dr["ShipID"].ToString()),
-                                    PortIdFrom = int.Parse(dr["PortFromID"].ToString()),
-                                    PortIdTo = int.Parse(dr["PortToID"].ToString()),
+                                    CaptainId = cId,
+                                    ShipId = sId,
+                                    PortIdFrom = pfId,
+                                    PortIdTo = ptId,
                                     StartDate = DateTime.Parse(dr["StartDate"].ToString()),
                                     EndDate = DateTime.Parse(dr["EndDate"].ToString())
                                 });
@@ -196,14 +213,32 @@ namespace ShipTransportations.Model.Repository
                 try {
                     using (var cmd = new SqlCommand("ReadTrip", cn)) {
                         cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter {
+                            ParameterName = "@ID",
+                            Value = id,
+                            SqlDbType = SqlDbType.Int,
+                            Direction = ParameterDirection.Input
+                        });
                         cn.Open();
                         using (var dr = cmd.ExecuteReader()) {
                             while (dr.Read()) {
                                 trip.TripId = int.Parse(dr["TripID"].ToString());
-                                trip.CaptainId = int.Parse(dr["CaptainID"].ToString());
-                                trip.ShipId = int.Parse(dr["ShipID"].ToString());
-                                trip.PortIdFrom = int.Parse(dr["PortFromID"].ToString());
-                                trip.PortIdTo = int.Parse(dr["PortToID"].ToString());
+                                if (string.IsNullOrEmpty(dr["CaptainID"].ToString()))
+                                    trip.CaptainId = null;
+                                else
+                                    trip.CaptainId = int.Parse(dr["CaptainID"].ToString());
+                                if (string.IsNullOrEmpty(dr["ShipID"].ToString()))
+                                    trip.ShipId = null;
+                                else
+                                    trip.ShipId = int.Parse(dr["ShipID"].ToString());
+                                if (string.IsNullOrEmpty(dr["PortFromID"].ToString()))
+                                    trip.PortIdFrom = null;
+                                else
+                                    trip.PortIdFrom = int.Parse(dr["PortFromID"].ToString());
+                                if (string.IsNullOrEmpty(dr["PortToID"].ToString()))
+                                    trip.PortIdTo = null;
+                                else
+                                    trip.PortIdTo = int.Parse(dr["PortToID"].ToString());
                                 trip.StartDate = DateTime.Parse(dr["StartDate"].ToString());
                                 trip.EndDate = DateTime.Parse(dr["EndDate"].ToString());
                             }

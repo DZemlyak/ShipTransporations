@@ -12,7 +12,7 @@ namespace ShipTransportations.Client
             menu = new Dictionary<string, MenuList> {
                 {"Add Captain", AddCaptain},
                 {"Update Captain", UpdateCaptain},
-                //{"Delete Captain", DeleteCaptain},
+                {"Delete Captain", DeleteCaptain},
                 {"Show Captain", ShowCaptain},
                 {"Show all Captains", ShowAllCaptains}
             };
@@ -63,6 +63,28 @@ namespace ShipTransportations.Client
             }
         }
 
+        private static void DeleteCaptain(Dictionary<string, MenuList> menu)
+        {
+            try {
+                int id;
+                Console.Write("Enter Captain ID: ");
+                var temp = Console.ReadLine();
+                while (!int.TryParse(temp, out id)) {
+                    Console.Write("Incorrect ID. Type again: ");
+                    temp = Console.ReadLine();
+                }
+                RepositoryHelper.CaptainRepository.Delete(id);
+                Console.WriteLine("\nCaptain deleted.");
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+            }
+            finally {
+                Console.WriteLine("\nPress any button.");
+                Console.ReadKey();
+            }
+        }
+        
         private static void ShowCaptain(Dictionary<string, MenuList> menu)
         {
             try {
