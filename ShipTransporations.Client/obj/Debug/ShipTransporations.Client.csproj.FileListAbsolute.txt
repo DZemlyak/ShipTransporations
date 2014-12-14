@@ -6,3 +6,9 @@ E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Client\ob
 E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Client\obj\Debug\ShipTransporations.Client.pdb
 E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Client\bin\Debug\ShipTransporations.Model.dll
 E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Client\bin\Debug\ShipTransporations.Model.pdb
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Client\bin\Debug\EntityFramework.dll
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Client\bin\Debug\EntityFramework.SqlServer.dll
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Client\bin\Debug\ShipTransportations.EF.dll
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Client\bin\Debug\ShipTransportations.EF.pdb
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Client\bin\Debug\EntityFramework.xml
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransporations.Client\bin\Debug\EntityFramework.SqlServer.xml

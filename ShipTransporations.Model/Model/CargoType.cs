@@ -1,9 +1,13 @@
-﻿namespace ShipTransportations.Model.Model
+﻿using System.Collections.Generic;
+
+namespace ShipTransportations.Model.Model
 {
     public class CargoType
     {
         public int TypeId { get; set; }
         public string Name { get; set; }
+
+        public virtual ICollection<Cargo> Cargos { get; set; } 
 
         public override string ToString()
         {

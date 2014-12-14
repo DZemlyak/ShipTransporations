@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipTransportations.Model.Repository;
+using System.Data.Entity;
+using System.Linq;
+using ShipTransportations.Model.Model;
 
 namespace ShipTransportations.Client
 {
@@ -22,10 +24,13 @@ namespace ShipTransportations.Client
         {
             try {
                 var cargoType = ObjectCreator.CreateCargoType();
-                RepositoryHelper.CargoTypesRepository.Create(cargoType);
+                context.CargoTypes.Add(cargoType);
+                context.SaveChanges();
+                context.Entry(cargoType).State = EntityState.Detached;
                 Console.WriteLine("\nCargoType added.");
             }
             catch (Exception ex) {
+                
                 Console.WriteLine(ex.Message);
             }
             finally {
@@ -44,9 +49,13 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                var cargoType = RepositoryHelper.CargoTypesRepository.GetItem(id);
+                var cargoType = context.CargoTypes.AsNoTracking().FirstOrDefault(t => t.TypeId == id);
+                if (cargoType == null)
+                    throw new Exception("Element is not found.");
                 cargoType = ObjectCreator.CreateCargoType(cargoType);
-                RepositoryHelper.CargoTypesRepository.Update(cargoType);
+                context.Entry(cargoType).State = EntityState.Modified;
+                context.SaveChanges();
+                context.Entry(cargoType).State = EntityState.Detached;
                 Console.WriteLine("\nCargo Type updated.");
             }
             catch (Exception ex) {
@@ -68,7 +77,8 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                RepositoryHelper.CargoTypesRepository.Delete(id);
+                var cargoType = context.CargoTypes.Find(id);
+                context.CargoTypes.Remove(cargoType);
                 Console.WriteLine("\nCargo type deleted.");
             }
             catch (Exception ex) {
@@ -90,7 +100,9 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                var cargoType = RepositoryHelper.CargoTypesRepository.GetItem(id);
+                var cargoType = context.CargoTypes.AsNoTracking().FirstOrDefault(t => t.TypeId == id);
+                if (cargoType == null)
+                    throw new Exception("Element is not found.");
                 Console.WriteLine(cargoType);
             }
             catch (Exception ex) {
@@ -106,7 +118,7 @@ namespace ShipTransportations.Client
         {
             try {
                 Console.Write("Cargo Types list.\n");
-                var cargoTypes = RepositoryHelper.CargoTypesRepository.ReadAll();
+                var cargoTypes = context.CargoTypes.AsNoTracking().ToList();
                 if (cargoTypes.Count == 0) Console.WriteLine("No elements found.");
                 foreach (var cargoType in cargoTypes) {
                     Console.WriteLine(cargoType);

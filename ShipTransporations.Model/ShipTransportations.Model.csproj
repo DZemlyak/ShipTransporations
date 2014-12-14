@@ -40,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IRepository.cs" />
     <Compile Include="Model\Captain.cs" />
     <Compile Include="Model\Cargo.cs" />
     <Compile Include="Model\CargoType.cs" />
@@ -49,14 +48,6 @@
     <Compile Include="Model\Ship.cs" />
     <Compile Include="Model\Trip.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\CaptainRepository.cs" />
-    <Compile Include="Repository\CargoRepository.cs" />
-    <Compile Include="Repository\CargoTypesRepository.cs" />
-    <Compile Include="Repository\CityRepository.cs" />
-    <Compile Include="Repository\PortRepository.cs" />
-    <Compile Include="Repository\RepositoryHelper.cs" />
-    <Compile Include="Repository\ShipRepository.cs" />
-    <Compile Include="Repository\TripRepositiry.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

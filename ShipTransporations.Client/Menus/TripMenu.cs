@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipTransportations.Model.Repository;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using System.Linq;
+using ShipTransportations.Model.Model;
 
 namespace ShipTransportations.Client
 {
@@ -22,7 +25,9 @@ namespace ShipTransportations.Client
         {
             try {
                 var trip = ObjectCreator.CreateTrip();
-                RepositoryHelper.TripRepositiry.Create(trip);
+                context.Trips.Add(trip);
+                context.SaveChanges();
+                context.Entry(trip).State = EntityState.Detached;
                 Console.WriteLine("\nTrip added.");
             }
             catch (Exception ex) {
@@ -44,9 +49,11 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                var trip = RepositoryHelper.TripRepositiry.GetItem(id);
+                var trip = context.Trips.AsNoTracking().FirstOrDefault(t => t.TripId == id);
                 trip = ObjectCreator.CreateTrip(trip);
-                RepositoryHelper.TripRepositiry.Update(trip);
+                context.Entry(trip).State = EntityState.Modified;
+                context.SaveChanges();
+                context.Entry(trip).State = EntityState.Detached;
                 Console.WriteLine("\nTrip updated.");
             }
             catch (Exception ex) {
@@ -68,7 +75,9 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                RepositoryHelper.TripRepositiry.Delete(id);
+                var trip = context.Trips.Find(id);
+                context.Trips.Remove(trip);
+                context.SaveChanges();
                 Console.WriteLine("\nTrip deleted.");
             }
             catch (Exception ex) {
@@ -90,7 +99,9 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                var trip = RepositoryHelper.TripRepositiry.GetItem(id);
+                var trip = context.Trips.AsNoTracking().FirstOrDefault(t => t.TripId == id);
+                if (trip == null)
+                    throw new Exception("Element is not found.");
                 Console.WriteLine(trip);
             }
             catch (Exception ex) {
@@ -106,7 +117,7 @@ namespace ShipTransportations.Client
         {
             try {
                 Console.Write("Trips list.\n");
-                var trips = RepositoryHelper.TripRepositiry.ReadAll();
+                var trips = context.Trips.AsNoTracking().ToList();
                 if (trips.Count == 0) Console.WriteLine("No elements found.");
                 foreach (var trip in trips) {
                     Console.WriteLine(trip);

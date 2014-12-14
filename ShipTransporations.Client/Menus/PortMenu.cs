@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipTransportations.Model.Repository;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using System.Linq;
+using ShipTransportations.Model.Model;
 
 namespace ShipTransportations.Client
 {
@@ -22,7 +25,9 @@ namespace ShipTransportations.Client
         {
             try {
                 var port = ObjectCreator.CreatePort();
-                RepositoryHelper.PortRepository.Create(port);
+                context.Ports.Add(port);
+                context.SaveChanges();
+                context.Entry(port).State = EntityState.Detached;
                 Console.WriteLine("\nPort added.");
             }
             catch (Exception ex) {
@@ -44,9 +49,11 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                var port = RepositoryHelper.PortRepository.GetItem(id);
+                var port = context.Ports.AsNoTracking().FirstOrDefault(t => t.PortId == id);
                 port = ObjectCreator.CreatePort(port);
-                RepositoryHelper.PortRepository.Update(port);
+                context.Entry(port).State = EntityState.Modified;
+                context.SaveChanges();
+                context.Entry(port).State = EntityState.Detached;
                 Console.WriteLine("\nPort updated.");
             }
             catch (Exception ex) {
@@ -68,7 +75,9 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                RepositoryHelper.PortRepository.Delete(id);
+                var port = context.Ports.Find(id);
+                context.Ports.Remove(port);
+                context.SaveChanges();
                 Console.WriteLine("\nPort deleted.");
             }
             catch (Exception ex) {
@@ -90,7 +99,9 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                var port = RepositoryHelper.PortRepository.GetItem(id);
+                var port = context.Ports.AsNoTracking().FirstOrDefault(t => t.PortId == id);
+                if (port == null)
+                    throw new Exception("Element is not found.");
                 Console.WriteLine(port);
             }
             catch (Exception ex) {
@@ -106,9 +117,9 @@ namespace ShipTransportations.Client
         {
             try {
                 Console.Write("Ports list.\n");
-                var porrts = RepositoryHelper.PortRepository.ReadAll();
-                if (porrts.Count == 0) Console.WriteLine("No elements found.");
-                foreach (var port in porrts) {
+                var ports = context.Ports.AsNoTracking().ToList();
+                if (ports.Count == 0) Console.WriteLine("No elements found.");
+                foreach (var port in ports) {
                     Console.WriteLine(port);
                 }
             }

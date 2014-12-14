@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipTransportations.EF;
 
 namespace ShipTransportations.Client
 {
     static partial class MenuControl
     {
         private delegate void MenuList(Dictionary<string, MenuList> menu);
+        private static Context context = new Context();
 
         public static void StartMenu()
         {

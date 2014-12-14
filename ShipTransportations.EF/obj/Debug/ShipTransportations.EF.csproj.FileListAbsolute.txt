@@ -1,0 +1,12 @@
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransportations.EF\bin\Debug\ShipTransportations.EF.dll.config
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransportations.EF\bin\Debug\ShipTransportations.EF.dll
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransportations.EF\bin\Debug\ShipTransportations.EF.pdb
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransportations.EF\bin\Debug\EntityFramework.dll
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransportations.EF\bin\Debug\EntityFramework.SqlServer.dll
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransportations.EF\bin\Debug\ShipTransporations.Model.dll
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransportations.EF\bin\Debug\ShipTransporations.Model.pdb
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransportations.EF\bin\Debug\EntityFramework.xml
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransportations.EF\bin\Debug\EntityFramework.SqlServer.xml
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransportations.EF\obj\Debug\ShipTransportations.EF.csprojResolveAssemblyReference.cache
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransportations.EF\obj\Debug\ShipTransportations.EF.dll
+E:\Учеба\NixSolutions\Study\ShipTransporations\ShipTransportations.EF\obj\Debug\ShipTransportations.EF.pdb

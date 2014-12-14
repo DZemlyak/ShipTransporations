@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipTransportations.Model.Repository;
+using System.Data.Entity;
+using System.Linq;
 
 namespace ShipTransportations.Client
 {
@@ -22,7 +23,9 @@ namespace ShipTransportations.Client
         {
             try {
                 var ship = ObjectCreator.CreateShip();
-                RepositoryHelper.ShipRepository.Create(ship);
+                context.Ships.Add(ship);
+                context.SaveChanges();
+                context.Entry(ship).State = EntityState.Detached;
                 Console.WriteLine("\nShip added.");
             }
             catch (Exception ex) {
@@ -44,9 +47,11 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                var ship = RepositoryHelper.ShipRepository.GetItem(id);
+                var ship = context.Ships.AsNoTracking().FirstOrDefault(t => t.ShipId == id);
                 ship = ObjectCreator.CreateShip(ship);
-                RepositoryHelper.ShipRepository.Update(ship);
+                context.Entry(ship).State = EntityState.Modified;
+                context.SaveChanges();
+                context.Entry(ship).State = EntityState.Detached;
                 Console.WriteLine("\nShip updated.");
             }
             catch (Exception ex) {
@@ -68,7 +73,9 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                RepositoryHelper.ShipRepository.Delete(id);
+                var ship = context.Ships.Find(id);
+                context.Ships.Remove(ship);
+                context.SaveChanges();
                 Console.WriteLine("\nShip deleted.");
             }
             catch (Exception ex) {
@@ -90,7 +97,9 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                var ship = RepositoryHelper.ShipRepository.GetItem(id);
+                var ship = context.Ships.AsNoTracking().FirstOrDefault(t => t.ShipId == id);
+                if (ship == null)
+                    throw new Exception("Element is not found.");
                 Console.WriteLine(ship);
             }
             catch (Exception ex) {
@@ -106,7 +115,7 @@ namespace ShipTransportations.Client
         {
             try {
                 Console.Write("Ships list.\n");
-                var ships = RepositoryHelper.ShipRepository.ReadAll();
+                var ships = context.Ships.AsNoTracking().ToList();
                 if (ships.Count == 0) Console.WriteLine("No elements found.");
                 foreach (var ship in ships) {
                     Console.WriteLine(ship);

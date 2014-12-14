@@ -143,35 +143,19 @@ namespace ShipTransportations.Client
 
             Console.Write("CaptainID: ");
             var temp = Console.ReadLine();
-            int? captainId;
-            if (!string.IsNullOrEmpty(temp))
-                captainId = CheckInt(temp);
-            else
-                captainId = null;
-            
+            var captainId = CheckInt(temp);
+
             Console.Write("ShipID: ");
             temp = Console.ReadLine();
-            int? shipId;
-            if (!string.IsNullOrEmpty(temp))
-                shipId = CheckInt(temp);
-            else
-                shipId = null;
+            var shipId = CheckInt(temp);
             
             Console.Write("PortIDFrom: ");
             temp = Console.ReadLine();
-            int? portIdFrom;
-            if (!string.IsNullOrEmpty(temp))
-                portIdFrom = CheckInt(temp);
-            else
-                portIdFrom = null;
+            var portIdFrom = CheckInt(temp);
              
             Console.Write("PortIDTo: ");
             temp = Console.ReadLine();
-            int? portIdTo;
-            if (!string.IsNullOrEmpty(temp))
-                portIdTo = CheckInt(temp);
-            else
-                portIdTo = null;
+            var portIdTo = CheckInt(temp);
 
             DateTime startDate, endDate;
             do {

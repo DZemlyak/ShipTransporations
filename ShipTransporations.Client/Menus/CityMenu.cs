@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipTransportations.Model.Repository;
+using System.Data.Entity;
+using System.Linq;
 
 namespace ShipTransportations.Client
 {
@@ -22,7 +23,9 @@ namespace ShipTransportations.Client
         {
             try {
                 var city = ObjectCreator.CreateCity();
-                RepositoryHelper.CityRepository.Create(city);
+                context.Cities.Add(city);
+                context.SaveChanges();
+                context.Entry(city).State = EntityState.Detached;
                 Console.WriteLine("\nCity added.");
             }
             catch (Exception ex) {
@@ -44,15 +47,17 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                var city = RepositoryHelper.CityRepository.GetItem(id);
+                var city = context.Cities.AsNoTracking().FirstOrDefault(t => t.CityId == id);
                 city = ObjectCreator.CreateCity(city);
-                RepositoryHelper.CityRepository.Update(city);
+                context.Entry(city).State = EntityState.Modified;
+                context.SaveChanges();
+                context.Entry(city).State = EntityState.Detached;
                 Console.WriteLine("\nCity updated.");
             }
             catch (Exception ex) {
                 Console.WriteLine(ex.Message);
             }
-            finally {
+            finally {      
                 Console.WriteLine("\nPress any button.");
                 Console.ReadKey();
             }
@@ -68,7 +73,9 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                RepositoryHelper.CityRepository.Delete(id);
+                var city = context.Cities.Find(id);
+                context.Cities.Remove(city);
+                context.SaveChanges();
                 Console.WriteLine("\nCity type deleted.");
             }
             catch (Exception ex) {
@@ -90,7 +97,9 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                var city = RepositoryHelper.CityRepository.GetItem(id);
+                var city = context.Cities.AsNoTracking().FirstOrDefault(t => t.CityId == id);
+                if (city == null)
+                    throw new Exception("Element is not found.");
                 Console.WriteLine(city);
             }
             catch (Exception ex) {
@@ -106,7 +115,7 @@ namespace ShipTransportations.Client
         {
             try {
                 Console.Write("Cities list.\n");
-                var cities = RepositoryHelper.CityRepository.ReadAll();
+                var cities = context.Cities.AsNoTracking().ToList();
                 if (cities.Count == 0) Console.WriteLine("No elements found.");
                 foreach (var city in cities) {
                     Console.WriteLine(city);
@@ -120,6 +129,5 @@ namespace ShipTransportations.Client
                 Console.ReadKey();
             }
         }
-        
     }
 }

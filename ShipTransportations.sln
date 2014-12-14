@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipTransporations.Client",
 		{67C80A86-7453-43D3-BFB1-8AFC896CD665} = {67C80A86-7453-43D3-BFB1-8AFC896CD665}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipTransportations.EF", "ShipTransportations.EF\ShipTransportations.EF.csproj", "{D95F5559-9AE1-4A5E-BD75-C7514A918AD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{B387848D-D85A-4F1F-B146-C501C001D6CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B387848D-D85A-4F1F-B146-C501C001D6CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B387848D-D85A-4F1F-B146-C501C001D6CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D95F5559-9AE1-4A5E-BD75-C7514A918AD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D95F5559-9AE1-4A5E-BD75-C7514A918AD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D95F5559-9AE1-4A5E-BD75-C7514A918AD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D95F5559-9AE1-4A5E-BD75-C7514A918AD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

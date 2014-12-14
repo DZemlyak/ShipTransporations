@@ -1,28 +1,23 @@
 ﻿using System;
-using System.Linq;
-using ShipTransportations.Model.Repository;
+using System.Collections.Generic;
 
 namespace ShipTransportations.Model.Model
 {
     public class Ship
     {
-        private int? _portId;
-
         public int ShipId { get; set; }
-        public int? PortId
-        {
-            get { return _portId; }
-            set {
-                if (value != null && RepositoryHelper.PortRepository.ReadAll().All(a => a.PortId != value))
-                    throw new Exception(string.Format("\nCan't find specified PortID : {0}.", value));
-                _portId = value;
-            }
-        }
+        public int PortId { get; set; }
         public int Number { get; set; }
         public int Capacity { get; set; }
         public DateTime CreateDate { get; set; }
         public int MaxDistance { get; set; }
         public int CrewSize { get; set; }
+
+        public virtual Port Port { get; set; }
+
+        public virtual ICollection<Captain> Captains { get; set; }
+        public virtual ICollection<Trip> Trips { get; set; }
+        
 
         public override string ToString() {
             return string.Format("\nShipId: {0}\nPortId: {1}\nNumber: {2}\nCapacity: {3}\nCreateDate: {4}" +

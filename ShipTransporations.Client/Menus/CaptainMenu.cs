@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using ShipTransportations.Model.Repository;
 
 namespace ShipTransportations.Client
 {
@@ -23,12 +23,15 @@ namespace ShipTransportations.Client
         {
             try {
                 var captain = ObjectCreator.CreateCaptain();
-                if (RepositoryHelper.CaptainRepository.ReadAll().Any(a => a.ShipId == captain.ShipId))
+                if (context.Captains.Any(a => a.ShipId == captain.ShipId))
                     throw new Exception(string.Format("Captain with ShipID {0} already exists.", captain.ShipId));
-                RepositoryHelper.CaptainRepository.Create(captain);
+                context.Captains.Add(captain);
+                context.SaveChanges();
+                context.Entry(captain).State = EntityState.Detached;
                 Console.WriteLine("\nCaptain added.");
             }
             catch (Exception ex) {
+                
                 Console.WriteLine(ex.Message);
             }
             finally {
@@ -47,17 +50,21 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                var captain = RepositoryHelper.CaptainRepository.GetItem(id);
+                var captain = context.Captains.AsNoTracking().FirstOrDefault(t => t.CaptainId == id);
+                if (captain == null)
+                    throw new Exception("Element is not found.");
                 captain = ObjectCreator.CreateCaptain(captain);
-                if (RepositoryHelper.CaptainRepository.ReadAll().Any(a => a.ShipId == captain.ShipId))
-                    throw new Exception(string.Format("Captain with ShipID {0} already exists.", captain.ShipId));
-                RepositoryHelper.CaptainRepository.Update(captain);
+                //if (context.Captains.Any(a => a.ShipId == captain.ShipId))
+                //    throw new Exception(string.Format("Captain with ShipID {0} already exists.", captain.ShipId));
+                context.Entry(captain).State = EntityState.Modified;
+                context.SaveChanges();
+                context.Entry(captain).State = EntityState.Detached;
                 Console.WriteLine("\nCaptain updated.");
             }
             catch (Exception ex) {
                 Console.WriteLine(ex.Message);
             }
-            finally {
+            finally {   
                 Console.WriteLine("\nPress any button.");
                 Console.ReadKey();
             }
@@ -73,7 +80,9 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                RepositoryHelper.CaptainRepository.Delete(id);
+                var captain = context.Captains.Find(id);
+                context.Captains.Remove(captain);
+                context.SaveChanges();
                 Console.WriteLine("\nCaptain deleted.");
             }
             catch (Exception ex) {
@@ -95,7 +104,9 @@ namespace ShipTransportations.Client
                     Console.Write("Incorrect ID. Type again: ");
                     temp = Console.ReadLine();
                 }
-                var captain = RepositoryHelper.CaptainRepository.GetItem(id);
+                var captain = context.Captains.AsNoTracking().FirstOrDefault(t => t.CaptainId == id);
+                if (captain == null)
+                    throw new Exception("Element is not found.");
                 Console.WriteLine(captain);
             }
             catch (Exception ex) {
@@ -111,7 +122,7 @@ namespace ShipTransportations.Client
         {
             try {
                 Console.Write("Captains list.\n");
-                var captains = RepositoryHelper.CaptainRepository.ReadAll();
+                var captains = context.Captains.AsNoTracking().ToList();
                 if (captains.Count == 0) Console.WriteLine("No elements found.");
                 foreach (var captain in captains) {
                     Console.WriteLine(captain);
