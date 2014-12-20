@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
+using ShipTransportations.EF;
+using ShipTransportations.EF.Validators;
+using ShipTransportations.Model.Model;
 
 namespace ShipTransportations.Client
 {
@@ -23,15 +24,11 @@ namespace ShipTransportations.Client
         {
             try {
                 var captain = ObjectCreator.CreateCaptain();
-                if (context.Captains.Any(a => a.ShipId == captain.ShipId))
-                    throw new Exception(string.Format("Captain with ShipID {0} already exists.", captain.ShipId));
-                context.Captains.Add(captain);
-                context.SaveChanges();
-                context.Entry(captain).State = EntityState.Detached;
+                var repository = new Repository<Captain>(new CaptainValidator());
+                repository.Add(captain);
                 Console.WriteLine("\nCaptain added.");
             }
             catch (Exception ex) {
-                
                 Console.WriteLine(ex.Message);
             }
             finally {
@@ -43,22 +40,11 @@ namespace ShipTransportations.Client
         private static void UpdateCaptain(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Captain ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var captain = context.Captains.AsNoTracking().FirstOrDefault(t => t.CaptainId == id);
-                if (captain == null)
-                    throw new Exception("Element is not found.");
+                var id = GetEntityId();
+                var repository = new Repository<Captain>(new CaptainValidator());
+                var captain = repository.Read(id);
                 captain = ObjectCreator.CreateCaptain(captain);
-                //if (context.Captains.Any(a => a.ShipId == captain.ShipId))
-                //    throw new Exception(string.Format("Captain with ShipID {0} already exists.", captain.ShipId));
-                context.Entry(captain).State = EntityState.Modified;
-                context.SaveChanges();
-                context.Entry(captain).State = EntityState.Detached;
+                repository.Update(captain);
                 Console.WriteLine("\nCaptain updated.");
             }
             catch (Exception ex) {
@@ -73,16 +59,10 @@ namespace ShipTransportations.Client
         private static void DeleteCaptain(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Captain ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var captain = context.Captains.Find(id);
-                context.Captains.Remove(captain);
-                context.SaveChanges();
+                var id = GetEntityId();
+                var repository = new Repository<Captain>(new CaptainValidator());
+                var captain = repository.Read(id);
+                repository.Delete(captain);
                 Console.WriteLine("\nCaptain deleted.");
             }
             catch (Exception ex) {
@@ -97,16 +77,9 @@ namespace ShipTransportations.Client
         private static void ShowCaptain(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Captain ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var captain = context.Captains.AsNoTracking().FirstOrDefault(t => t.CaptainId == id);
-                if (captain == null)
-                    throw new Exception("Element is not found.");
+                var id = GetEntityId();
+                var repository = new Repository<Captain>(new CaptainValidator());
+                var captain = repository.Read(id);
                 Console.WriteLine(captain);
             }
             catch (Exception ex) {
@@ -122,9 +95,8 @@ namespace ShipTransportations.Client
         {
             try {
                 Console.Write("Captains list.\n");
-                var captains = context.Captains.AsNoTracking().ToList();
-                if (captains.Count == 0) Console.WriteLine("No elements found.");
-                foreach (var captain in captains) {
+                var repository = new Repository<Captain>(new CaptainValidator());
+                foreach (var captain in repository.ReadAll()) {
                     Console.WriteLine(captain);
                 }
             }

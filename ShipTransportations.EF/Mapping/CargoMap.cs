@@ -7,7 +7,7 @@ namespace ShipTransportations.EF.Mapping
     {
         public CargoMap()
         {
-            HasKey(t => t.CargoId);
+            HasKey(t => t.Id);
 
             Property(t => t.TypeId)
                 .IsRequired();
@@ -23,7 +23,7 @@ namespace ShipTransportations.EF.Mapping
                 .IsOptional();
             
             ToTable("Cargo");
-            Property(t => t.CargoId).HasColumnName("CargoID");
+            Property(t => t.Id).HasColumnName("CargoID");
             Property(t => t.TypeId).HasColumnName("TypeID");
             Property(t => t.TripId).HasColumnName("TripID");
             Property(t => t.Number).HasColumnName("Number");

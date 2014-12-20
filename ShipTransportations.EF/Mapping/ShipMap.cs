@@ -7,7 +7,12 @@ namespace ShipTransportations.EF.Mapping
     {
         public ShipMap()
         {
-            HasKey(t => t.ShipId);
+            HasKey(t => t.Id);
+
+            HasMany(t => t.Captains)
+                .WithRequired(t => t.Ship).HasForeignKey(t => t.ShipId);
+            HasMany(t => t.Trips)
+                            .WithOptional(t => t.Ship).HasForeignKey(t => t.ShipId);
 
             Property(t => t.PortId)
                 .IsRequired();
@@ -23,7 +28,7 @@ namespace ShipTransportations.EF.Mapping
                 .IsOptional();
 
             ToTable("Ship");
-            Property(t => t.ShipId).HasColumnName("ShipID");
+            Property(t => t.Id).HasColumnName("ShipID");
             Property(t => t.PortId).HasColumnName("PortID");
             Property(t => t.Capacity).HasColumnName("Capacity");
             Property(t => t.Number).HasColumnName("Number");

@@ -18,10 +18,13 @@ namespace ShipTransportations.Client
             
             Console.Write("LastName: ");
             var lastName = Console.ReadLine();
-            
-            return cap != null 
-                ? new Captain { CaptainId = cap.CaptainId, ShipId = shipId, FirstName = firstName, LastName = lastName } 
-                : new Captain { ShipId = shipId, FirstName = firstName, LastName = lastName };
+
+            if (cap == null)
+                return new Captain { ShipId = shipId, FirstName = firstName, LastName = lastName };
+            cap.ShipId = shipId;
+            cap.FirstName = firstName;
+            cap.LastName = lastName;
+            return cap;
         }
 
         public static Cargo CreateCargo(Cargo cargo = null)
@@ -52,12 +55,17 @@ namespace ShipTransportations.Client
             temp = Console.ReadLine();
             var insPrice = CheckDouble(temp);
 
-            return cargo != null 
-                ? new Cargo { CargoId = cargo.CargoId, InsurancePrice = insPrice, 
-                    Number = number, Price = price, TypeId = typeId,TripId = tripId, Weight = weight }
-                : new Cargo { InsurancePrice = insPrice, Number = number, Price = price, 
-                    TypeId = typeId, TripId = tripId, Weight = weight
-            };
+            if (cargo == null)
+                return new Cargo { InsurancePrice = insPrice, Number = number, Price = price, 
+                    TypeId = typeId, TripId = tripId, Weight = weight };
+
+            cargo.InsurancePrice = insPrice;
+            cargo.Number = number;
+            cargo.Price = price;
+            cargo.TypeId = typeId;
+            cargo.TripId = tripId;
+            cargo.Weight = weight;
+            return cargo;
         }
 
         public static CargoType CreateCargoType(CargoType cargoType = null)
@@ -67,9 +75,11 @@ namespace ShipTransportations.Client
             Console.Write("Name: ");
             var name = Console.ReadLine();
 
-            return cargoType != null 
-                ? new CargoType { TypeId = cargoType.TypeId, Name = name } 
-                : new CargoType {Name = name};
+            if (cargoType == null)
+                return new CargoType { Name = name };
+
+            cargoType.Name = name;
+            return cargoType;
         }
 
         public static City CreateCity(City city = null)
@@ -79,9 +89,9 @@ namespace ShipTransportations.Client
             Console.Write("Name: ");
             var name = Console.ReadLine();
 
-            return city != null 
-                ? new City { CityId = city.CityId, Name = name } 
-                : new City { Name = name };
+            if (city == null) return new City {Name = name};
+            city.Name = name;
+            return city;
         }
 
         public static Port CreatePort(Port port = null)
@@ -95,9 +105,12 @@ namespace ShipTransportations.Client
             Console.Write("Name: ");
             var name = Console.ReadLine();
 
-            return port != null 
-                ? new Port{ Name = name, CityId = cityId, PortId = port.PortId } 
-                : new Port{ Name = name, CityId = cityId };
+            if (port == null)
+                return new Port{ Name = name, CityId = cityId };
+
+            port.Name = name;
+            port.CityId = cityId;
+            return port;
         }
 
         public static Ship CreateShip(Ship ship = null)
@@ -128,13 +141,23 @@ namespace ShipTransportations.Client
             temp = Console.ReadLine();
             var crewSize = CheckInt(temp);
 
-            return ship != null
-                ? new Ship {
-                    Capacity = capacity, CreateDate = createDate, Number = number, PortId = portId, 
-                    CrewSize = crewSize, MaxDistance = maxDistance, ShipId = ship.ShipId }
-                : new Ship {
-                    Capacity = capacity, CreateDate = createDate, Number = number, PortId = portId, 
-                    CrewSize = crewSize, MaxDistance = maxDistance };
+            if (ship == null)
+                return new Ship {
+                    Capacity = capacity,
+                    CreateDate = createDate,
+                    Number = number,
+                    PortId = portId,
+                    CrewSize = crewSize,
+                    MaxDistance = maxDistance
+                };
+
+            ship.Capacity = capacity;
+            ship.CreateDate = createDate;
+            ship.Number = number;
+            ship.PortId = portId;
+            ship.CrewSize = crewSize;
+            ship.MaxDistance = maxDistance;
+            return ship;
         }
 
         public static Trip CreateTrip(Trip trip = null)
@@ -167,14 +190,19 @@ namespace ShipTransportations.Client
                 temp = Console.ReadLine();
                 endDate = CheckDate(temp);
             } while (startDate > endDate);
-            
-            return trip != null
-                ? new Trip {
-                    TripId = trip.TripId, CaptainId = captainId, ShipId = shipId, EndDate = endDate, PortIdFrom = portIdFrom,
-                    PortIdTo = portIdTo, StartDate = startDate }
-                : new Trip {
+
+            if (trip == null)
+                return new Trip {
                     CaptainId = captainId, ShipId = shipId, EndDate = endDate, PortIdFrom = portIdFrom,
                     PortIdTo = portIdTo, StartDate = startDate };
+
+            trip.CaptainId = captainId;
+            trip.ShipId = shipId;
+            trip.EndDate = endDate;
+            trip.PortIdFrom = portIdFrom;
+            trip.PortIdTo = portIdTo;
+            trip.StartDate = startDate;
+            return trip;
         }
 
         private static int CheckInt(string temp) {

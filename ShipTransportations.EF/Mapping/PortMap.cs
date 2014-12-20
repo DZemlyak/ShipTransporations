@@ -7,8 +7,13 @@ namespace ShipTransportations.EF.Mapping
     {
         public PortMap()
         {
-            HasKey(t => t.PortId);
-
+            HasKey(t => t.Id);
+            HasMany(t => t.Ships)
+                .WithRequired(t => t.Port).HasForeignKey(t => t.PortId);
+            HasMany(t => t.Trips)
+                .WithRequired(t => t.PortFrom).HasForeignKey(t => t.PortIdFrom);
+            HasMany(t => t.Trips)
+                .WithRequired(t => t.PortTo).HasForeignKey(t => t.PortIdTo);
             Property(t => t.CityId)
                 .IsRequired();
             Property(t => t.Name)
@@ -17,7 +22,7 @@ namespace ShipTransportations.EF.Mapping
 
             ToTable("Port");
             Property(t => t.CityId).HasColumnName("CityID");
-            Property(t => t.PortId).HasColumnName("PortID");
+            Property(t => t.Id).HasColumnName("PortID");
             Property(t => t.Name).HasColumnName("Name");
 
         }

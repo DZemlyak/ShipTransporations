@@ -2,9 +2,8 @@
 
 namespace ShipTransportations.Model.Model
 {
-    public class Port
+    public class Port : BaseEntity
     {
-        public int PortId { get; set; }
         public int CityId { get; set; }
         public string Name { get; set; }
 
@@ -14,7 +13,7 @@ namespace ShipTransportations.Model.Model
         public virtual ICollection<Ship> Ships { get; set; }
 
         public override string ToString() {
-            return string.Format("\nPortID: {0}\nCityID: {1}\nName: {2}", PortId, CityId, Name);
+            return string.Format("\nPortID: {0}\nCityID: {1}\nName: {2}", Id, CityId, Name);
         }
     }
 }

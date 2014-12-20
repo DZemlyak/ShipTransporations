@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
+using ShipTransportations.EF;
+using ShipTransportations.EF.Validators;
 using ShipTransportations.Model.Model;
 
 namespace ShipTransportations.Client
@@ -25,9 +24,8 @@ namespace ShipTransportations.Client
         {
             try {
                 var port = ObjectCreator.CreatePort();
-                context.Ports.Add(port);
-                context.SaveChanges();
-                context.Entry(port).State = EntityState.Detached;
+                var repository = new Repository<Port>(new PortValidator());
+                repository.Add(port);
                 Console.WriteLine("\nPort added.");
             }
             catch (Exception ex) {
@@ -42,18 +40,11 @@ namespace ShipTransportations.Client
         private static void UpdatePort(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Port ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var port = context.Ports.AsNoTracking().FirstOrDefault(t => t.PortId == id);
+                var id = GetEntityId();
+                var repository = new Repository<Port>(new PortValidator());
+                var port = repository.Read(id);
                 port = ObjectCreator.CreatePort(port);
-                context.Entry(port).State = EntityState.Modified;
-                context.SaveChanges();
-                context.Entry(port).State = EntityState.Detached;
+                repository.Update(port);
                 Console.WriteLine("\nPort updated.");
             }
             catch (Exception ex) {
@@ -68,16 +59,10 @@ namespace ShipTransportations.Client
         private static void DeletePort(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Port ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var port = context.Ports.Find(id);
-                context.Ports.Remove(port);
-                context.SaveChanges();
+                var id = GetEntityId();
+                var repository = new Repository<Port>(new PortValidator());
+                var port = repository.Read(id);
+                repository.Delete(port);
                 Console.WriteLine("\nPort deleted.");
             }
             catch (Exception ex) {
@@ -92,16 +77,9 @@ namespace ShipTransportations.Client
         private static void ShowPort(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Port ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var port = context.Ports.AsNoTracking().FirstOrDefault(t => t.PortId == id);
-                if (port == null)
-                    throw new Exception("Element is not found.");
+                var id = GetEntityId();
+                var repository = new Repository<Port>(new PortValidator());
+                var port = repository.Read(id);
                 Console.WriteLine(port);
             }
             catch (Exception ex) {
@@ -117,8 +95,8 @@ namespace ShipTransportations.Client
         {
             try {
                 Console.Write("Ports list.\n");
-                var ports = context.Ports.AsNoTracking().ToList();
-                if (ports.Count == 0) Console.WriteLine("No elements found.");
+                var repository = new Repository<Port>(new PortValidator());
+                var ports = repository.ReadAll();
                 foreach (var port in ports) {
                     Console.WriteLine(port);
                 }

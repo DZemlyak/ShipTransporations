@@ -7,14 +7,15 @@ namespace ShipTransportations.EF.Mapping
     {
         public CargoTypeMap()
         {
-            HasKey(t => t.TypeId);
-
+            HasKey(t => t.Id);
+            HasMany(t => t.Cargos)
+               .WithRequired(t => t.CargoType).HasForeignKey(t => t.TypeId);
             Property(t => t.Name)
                 .IsRequired()
                 .HasMaxLength(50);
 
             ToTable("CargoType");
-            Property(t => t.TypeId).HasColumnName("CargoTypeID");
+            Property(t => t.Id).HasColumnName("CargoTypeID");
             Property(t => t.Name).HasColumnName("Name");
         }
 

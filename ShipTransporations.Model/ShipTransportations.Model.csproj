@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\BaseEntity.cs" />
     <Compile Include="Model\Captain.cs" />
     <Compile Include="Model\Cargo.cs" />
     <Compile Include="Model\CargoType.cs" />

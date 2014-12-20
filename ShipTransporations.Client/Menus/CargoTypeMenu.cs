@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
+using ShipTransportations.EF;
+using ShipTransportations.EF.Validators;
 using ShipTransportations.Model.Model;
 
 namespace ShipTransportations.Client
@@ -24,9 +24,8 @@ namespace ShipTransportations.Client
         {
             try {
                 var cargoType = ObjectCreator.CreateCargoType();
-                context.CargoTypes.Add(cargoType);
-                context.SaveChanges();
-                context.Entry(cargoType).State = EntityState.Detached;
+                var repository = new Repository<CargoType>(new CargoTypeValidator());
+                repository.Add(cargoType);
                 Console.WriteLine("\nCargoType added.");
             }
             catch (Exception ex) {
@@ -42,20 +41,10 @@ namespace ShipTransportations.Client
         private static void UpdateCargoType(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Cargo Type ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var cargoType = context.CargoTypes.AsNoTracking().FirstOrDefault(t => t.TypeId == id);
-                if (cargoType == null)
-                    throw new Exception("Element is not found.");
-                cargoType = ObjectCreator.CreateCargoType(cargoType);
-                context.Entry(cargoType).State = EntityState.Modified;
-                context.SaveChanges();
-                context.Entry(cargoType).State = EntityState.Detached;
+                var id = GetEntityId();
+                var repository = new Repository<CargoType>(new CargoTypeValidator());
+                var cargoType = repository.Read(id);
+                repository.Update(cargoType);
                 Console.WriteLine("\nCargo Type updated.");
             }
             catch (Exception ex) {
@@ -70,15 +59,10 @@ namespace ShipTransportations.Client
         private static void DeleteCargoType(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Cargo Type ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var cargoType = context.CargoTypes.Find(id);
-                context.CargoTypes.Remove(cargoType);
+                var id = GetEntityId();
+                var repository = new Repository<CargoType>(new CargoTypeValidator());
+                var cargoType = repository.Read(id);
+                repository.Delete(cargoType);
                 Console.WriteLine("\nCargo type deleted.");
             }
             catch (Exception ex) {
@@ -93,16 +77,9 @@ namespace ShipTransportations.Client
         private static void ShowCargoType(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Cargo Type ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var cargoType = context.CargoTypes.AsNoTracking().FirstOrDefault(t => t.TypeId == id);
-                if (cargoType == null)
-                    throw new Exception("Element is not found.");
+                var id = GetEntityId();
+                var repository = new Repository<CargoType>(new CargoTypeValidator());
+                var cargoType = repository.Read(id);
                 Console.WriteLine(cargoType);
             }
             catch (Exception ex) {
@@ -118,9 +95,8 @@ namespace ShipTransportations.Client
         {
             try {
                 Console.Write("Cargo Types list.\n");
-                var cargoTypes = context.CargoTypes.AsNoTracking().ToList();
-                if (cargoTypes.Count == 0) Console.WriteLine("No elements found.");
-                foreach (var cargoType in cargoTypes) {
+                var repository = new Repository<CargoType>(new CargoTypeValidator());
+                foreach (var cargoType in repository.ReadAll()) {
                     Console.WriteLine(cargoType);
                 }
             }

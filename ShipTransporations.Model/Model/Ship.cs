@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace ShipTransportations.Model.Model
 {
-    public class Ship
+    public class Ship : BaseEntity
     {
-        public int ShipId { get; set; }
         public int PortId { get; set; }
         public int Number { get; set; }
         public int Capacity { get; set; }
@@ -21,7 +20,7 @@ namespace ShipTransportations.Model.Model
 
         public override string ToString() {
             return string.Format("\nShipId: {0}\nPortId: {1}\nNumber: {2}\nCapacity: {3}\nCreateDate: {4}" +
-                                 "\nMaxDistance: {5}\nCrewSize: {6}", ShipId, PortId, Number, Capacity,
+                                 "\nMaxDistance: {5}\nCrewSize: {6}", Id, PortId, Number, Capacity,
                                  CreateDate.ToShortDateString(), MaxDistance, CrewSize);
         }
     }

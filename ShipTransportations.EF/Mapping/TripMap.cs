@@ -7,8 +7,9 @@ namespace ShipTransportations.EF.Mapping
     {
         public TripMap()
         {
-            HasKey(t => t.TripId);
-
+            HasKey(t => t.Id);
+            HasMany(t => t.Cargos)
+                           .WithRequired(t => t.Trip).HasForeignKey(t => t.TripId);
             Property(t => t.CaptainId)
                 .IsRequired();
             Property(t => t.ShipId)
@@ -25,7 +26,7 @@ namespace ShipTransportations.EF.Mapping
             ToTable("Trip");
             Property(t => t.CaptainId).HasColumnName("CaptainID");
             Property(t => t.ShipId).HasColumnName("ShipID");
-            Property(t => t.TripId).HasColumnName("TripID");
+            Property(t => t.Id).HasColumnName("TripID");
             Property(t => t.PortIdFrom).HasColumnName("PortIDFrom");
             Property(t => t.PortIdTo).HasColumnName("PortIDTo");
             Property(t => t.StartDate).HasColumnName("StartDate");

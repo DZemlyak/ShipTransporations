@@ -1,8 +1,7 @@
 ﻿namespace ShipTransportations.Model.Model
 {
-    public class Cargo
+    public class Cargo : BaseEntity
     {
-        public int CargoId { get; set; }
         public int TypeId { get; set; }
         public int TripId { get; set; }
         public int Number { get; set; }
@@ -15,7 +14,7 @@
 
         public override string ToString() {
             return string.Format("\nCargoID: {0}\nTypeID: {1}\nTripID: {2}\nNumber: {3}\nWeight: {4}\nPrice: {5}" +
-                                 "\nInsurancePrice: {6}", CargoId, TypeId, TripId, Number, 
+                                 "\nInsurancePrice: {6}", Id, TypeId, TripId, Number, 
                                  Weight, Price, InsurancePrice);
         }
     }

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
+using ShipTransportations.EF;
+using ShipTransportations.EF.Validators;
+using ShipTransportations.Model.Model;
 
 namespace ShipTransportations.Client
 {
@@ -23,9 +24,8 @@ namespace ShipTransportations.Client
         {
             try {
                 var city = ObjectCreator.CreateCity();
-                context.Cities.Add(city);
-                context.SaveChanges();
-                context.Entry(city).State = EntityState.Detached;
+                var repository = new Repository<City>(new CityValidator());
+                repository.Add(city);
                 Console.WriteLine("\nCity added.");
             }
             catch (Exception ex) {
@@ -40,18 +40,11 @@ namespace ShipTransportations.Client
         private static void UpdateCity(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter City ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var city = context.Cities.AsNoTracking().FirstOrDefault(t => t.CityId == id);
+                var id = GetEntityId();
+                var repository = new Repository<City>(new CityValidator());
+                var city = repository.Read(id);
                 city = ObjectCreator.CreateCity(city);
-                context.Entry(city).State = EntityState.Modified;
-                context.SaveChanges();
-                context.Entry(city).State = EntityState.Detached;
+                repository.Update(city);
                 Console.WriteLine("\nCity updated.");
             }
             catch (Exception ex) {
@@ -66,16 +59,10 @@ namespace ShipTransportations.Client
         private static void DeleteCity(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter City ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var city = context.Cities.Find(id);
-                context.Cities.Remove(city);
-                context.SaveChanges();
+                var id = GetEntityId();
+                var repository = new Repository<City>(new CityValidator());
+                var city = repository.Read(id);
+                repository.Delete(city);
                 Console.WriteLine("\nCity type deleted.");
             }
             catch (Exception ex) {
@@ -90,16 +77,9 @@ namespace ShipTransportations.Client
         private static void ShowCity(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter City ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var city = context.Cities.AsNoTracking().FirstOrDefault(t => t.CityId == id);
-                if (city == null)
-                    throw new Exception("Element is not found.");
+                var id = GetEntityId();
+                var repository = new Repository<City>(new CityValidator());
+                var city = repository.Read(id);
                 Console.WriteLine(city);
             }
             catch (Exception ex) {
@@ -115,9 +95,8 @@ namespace ShipTransportations.Client
         {
             try {
                 Console.Write("Cities list.\n");
-                var cities = context.Cities.AsNoTracking().ToList();
-                if (cities.Count == 0) Console.WriteLine("No elements found.");
-                foreach (var city in cities) {
+                var repository = new Repository<City>(new CityValidator());
+                foreach (var city in repository.ReadAll()) {
                     Console.WriteLine(city);
                 }
             }

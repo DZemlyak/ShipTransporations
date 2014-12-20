@@ -8,7 +8,6 @@ namespace ShipTransportations.Client
     static partial class MenuControl
     {
         private delegate void MenuList(Dictionary<string, MenuList> menu);
-        private static Context context = new Context();
 
         public static void StartMenu()
         {
@@ -27,7 +26,7 @@ namespace ShipTransportations.Client
         private static void Menu(Dictionary<string, MenuList> menu)
         {
             var position = 1;
-            do {
+            while (true) {
                 Console.CursorVisible = false;
                 Console.Clear();
                 PrintMenu(menu, position);
@@ -47,7 +46,7 @@ namespace ShipTransportations.Client
                 Console.Clear();
                 Console.CursorVisible = true;
                 menu.ElementAt(position - 1).Value.Invoke(menu);
-            } while (true);
+            }
         }
 
         private static void PrintMenu(Dictionary<string, MenuList> menu, int position)
@@ -62,6 +61,17 @@ namespace ShipTransportations.Client
             }
             Console.SetCursorPosition(0, Console.WindowHeight - 3);
             Console.WriteLine("UP/DOWN - up/down. LEFT - back/exit. ENTER - select.");
+        }
+
+        private static int GetEntityId() {
+            int id;
+            Console.Write("Enter ID of a record: ");
+            var temp = Console.ReadLine();
+            while (!int.TryParse(temp, out id)) {
+                Console.Write("Incorrect ID. Type again: ");
+                temp = Console.ReadLine();
+            }
+            return id;
         }
     }
 }

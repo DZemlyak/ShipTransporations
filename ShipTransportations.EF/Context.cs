@@ -6,12 +6,19 @@ using ShipTransportations.Model.Model;
 
 namespace ShipTransportations.EF
 {
-    public class Context : DbContext
+    internal sealed class Context : DbContext
     {
-        public Context() : base("PortConnectionString") {
+        private static Context _context;
+
+        private Context() : base("PortConnectionString") {
+            Configuration.LazyLoadingEnabled = true;
             Database.SetInitializer(new PortDBInitializer());
         }
-        
+
+        public static Context GetContext() {
+            return _context ?? (_context = new Context());
+        }
+
         public DbSet<Captain> Captains { get; set; }
         public DbSet<Cargo> Cargos { get; set; }
         public DbSet<CargoType> CargoTypes { get; set; }
@@ -29,39 +36,10 @@ namespace ShipTransportations.EF
             modelBuilder.Configurations.Add(new PortMap());
             modelBuilder.Configurations.Add(new ShipMap());
             modelBuilder.Configurations.Add(new TripMap());
-
-            modelBuilder.Entity<Ship>().HasMany(t => t.Captains)
-                .WithRequired(t => t.Ship).HasForeignKey(t => t.ShipId);
-
-            modelBuilder.Entity<City>().HasMany(t => t.Ports)
-                .WithRequired(t => t.City).HasForeignKey(t => t.CityId);
-
-            modelBuilder.Entity<Port>().HasMany(t => t.Ships)
-                .WithRequired(t => t.Port).HasForeignKey(t => t.PortId);
-
-            modelBuilder.Entity<Port>().HasMany(t => t.Trips)
-                .WithRequired(t => t.PortFrom).HasForeignKey(t => t.PortIdFrom);
-
-            modelBuilder.Entity<Port>().HasMany(t => t.Trips)
-                .WithRequired(t => t.PortTo).HasForeignKey(t => t.PortIdTo);
-
-            modelBuilder.Entity<Ship>().HasMany(t => t.Trips)
-                .WithOptional(t => t.Ship).HasForeignKey(t => t.ShipId);
-
-            modelBuilder.Entity<Captain>().HasMany(t => t.Trips)
-               .WithRequired(t => t.Captain).HasForeignKey(t => t.CaptainId)
-               .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Trip>().HasMany(t => t.Cargos)
-               .WithRequired(t => t.Trip).HasForeignKey(t => t.TripId);
-
-            modelBuilder.Entity<CargoType>().HasMany(t => t.Cargos)
-               .WithRequired(t => t.CargoType).HasForeignKey(t => t.TypeId);
-            
             base.OnModelCreating(modelBuilder);
         }
 
-        protected class PortDBInitializer : CreateDatabaseIfNotExists<Context> {
+        private class PortDBInitializer : CreateDatabaseIfNotExists<Context> {
             protected override void Seed(Context context) {
                 IList<City> cities = new List<City>();
                 cities.Add(new City { Name = "Odessa" });

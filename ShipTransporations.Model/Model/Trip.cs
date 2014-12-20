@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace ShipTransportations.Model.Model
 {
-    public class Trip
+    public class Trip : BaseEntity
     {
-        public int TripId { get; set; }
         public int CaptainId { get; set; }
         public int ShipId { get; set; }
         public int PortIdFrom { get; set; }
@@ -22,7 +21,7 @@ namespace ShipTransportations.Model.Model
 
         public override string ToString() {
             return string.Format("\nTripID: {0}\nCaptainId: {1}\nShipId: {2}\nPortIdFrom: {3}\nPortIdTo: {4}" +
-                                 "\nStartDate: {5}\nEndDate: {6}", TripId, CaptainId, ShipId, PortIdFrom,
+                                 "\nStartDate: {5}\nEndDate: {6}", Id, CaptainId, ShipId, PortIdFrom,
                                  PortIdTo, StartDate.ToShortDateString(), EndDate.ToShortDateString());
         }
     }

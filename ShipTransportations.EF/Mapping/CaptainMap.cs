@@ -7,7 +7,11 @@ namespace ShipTransportations.EF.Mapping
     {
         public CaptainMap()
         {
-            HasKey(t => t.CaptainId);
+            HasKey(t => t.Id);
+
+            HasMany(t => t.Trips)
+               .WithRequired(t => t.Captain).HasForeignKey(t => t.CaptainId)
+               .WillCascadeOnDelete(false);
 
             Property(t => t.ShipId)
                 .IsOptional();
@@ -21,7 +25,7 @@ namespace ShipTransportations.EF.Mapping
                 .HasMaxLength(50);
 
             ToTable("Captain");
-            Property(t => t.CaptainId).HasColumnName("CaptainID");
+            Property(t => t.Id).HasColumnName("CaptainID");
             Property(t => t.FirstName).HasColumnName("FirstName");
             Property(t => t.LastName).HasColumnName("LastName");
             Property(t => t.ShipId).HasColumnName("ShipID");

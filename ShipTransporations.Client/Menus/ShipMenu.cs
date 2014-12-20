@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using ShipTransportations.EF;
+using ShipTransportations.EF.Validators;
+using ShipTransportations.Model.Model;
 
 namespace ShipTransportations.Client
 {
@@ -23,9 +26,8 @@ namespace ShipTransportations.Client
         {
             try {
                 var ship = ObjectCreator.CreateShip();
-                context.Ships.Add(ship);
-                context.SaveChanges();
-                context.Entry(ship).State = EntityState.Detached;
+                var repository = new Repository<Ship>(new ShipValidator());
+                repository.Add(ship);
                 Console.WriteLine("\nShip added.");
             }
             catch (Exception ex) {
@@ -40,18 +42,11 @@ namespace ShipTransportations.Client
         private static void UpdateShip(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Ship ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var ship = context.Ships.AsNoTracking().FirstOrDefault(t => t.ShipId == id);
+                var id = GetEntityId();
+                var repository = new Repository<Ship>(new ShipValidator());
+                var ship = repository.Read(id);
                 ship = ObjectCreator.CreateShip(ship);
-                context.Entry(ship).State = EntityState.Modified;
-                context.SaveChanges();
-                context.Entry(ship).State = EntityState.Detached;
+                repository.Update(ship);
                 Console.WriteLine("\nShip updated.");
             }
             catch (Exception ex) {
@@ -66,16 +61,10 @@ namespace ShipTransportations.Client
         private static void DeleteShip(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Ship ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var ship = context.Ships.Find(id);
-                context.Ships.Remove(ship);
-                context.SaveChanges();
+                var id = GetEntityId();
+                var repository = new Repository<Ship>(new ShipValidator());
+                var ship = repository.Read(id);
+                repository.Delete(ship);
                 Console.WriteLine("\nShip deleted.");
             }
             catch (Exception ex) {
@@ -90,16 +79,9 @@ namespace ShipTransportations.Client
         private static void ShowShip(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Ship ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var ship = context.Ships.AsNoTracking().FirstOrDefault(t => t.ShipId == id);
-                if (ship == null)
-                    throw new Exception("Element is not found.");
+                var id = GetEntityId();
+                var repository = new Repository<Ship>(new ShipValidator());
+                var ship = repository.Read(id);
                 Console.WriteLine(ship);
             }
             catch (Exception ex) {
@@ -115,9 +97,8 @@ namespace ShipTransportations.Client
         {
             try {
                 Console.Write("Ships list.\n");
-                var ships = context.Ships.AsNoTracking().ToList();
-                if (ships.Count == 0) Console.WriteLine("No elements found.");
-                foreach (var ship in ships) {
+                var repository = new Repository<Ship>(new ShipValidator());
+                foreach (var ship in repository.ReadAll()) {
                     Console.WriteLine(ship);
                 }
             }

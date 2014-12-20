@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
+using ShipTransportations.EF;
+using ShipTransportations.EF.Validators;
 using ShipTransportations.Model.Model;
 
 namespace ShipTransportations.Client
@@ -25,9 +24,8 @@ namespace ShipTransportations.Client
         {
             try {
                 var trip = ObjectCreator.CreateTrip();
-                context.Trips.Add(trip);
-                context.SaveChanges();
-                context.Entry(trip).State = EntityState.Detached;
+                var repository = new Repository<Trip>(new TripValidator());
+                repository.Add(trip);
                 Console.WriteLine("\nTrip added.");
             }
             catch (Exception ex) {
@@ -42,18 +40,11 @@ namespace ShipTransportations.Client
         private static void UpdateTrip(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Trip ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var trip = context.Trips.AsNoTracking().FirstOrDefault(t => t.TripId == id);
+                var id = GetEntityId();
+                var repository = new Repository<Trip>(new TripValidator());
+                var trip = repository.Read(id);
                 trip = ObjectCreator.CreateTrip(trip);
-                context.Entry(trip).State = EntityState.Modified;
-                context.SaveChanges();
-                context.Entry(trip).State = EntityState.Detached;
+                repository.Update(trip);
                 Console.WriteLine("\nTrip updated.");
             }
             catch (Exception ex) {
@@ -68,16 +59,10 @@ namespace ShipTransportations.Client
         private static void DeleteTrip(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Trip ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var trip = context.Trips.Find(id);
-                context.Trips.Remove(trip);
-                context.SaveChanges();
+                var id = GetEntityId();
+                var repository = new Repository<Trip>(new TripValidator());
+                var trip = repository.Read(id);
+                repository.Delete(trip);
                 Console.WriteLine("\nTrip deleted.");
             }
             catch (Exception ex) {
@@ -92,16 +77,9 @@ namespace ShipTransportations.Client
         private static void ShowTrip(Dictionary<string, MenuList> menu)
         {
             try {
-                int id;
-                Console.Write("Enter Trip ID: ");
-                var temp = Console.ReadLine();
-                while (!int.TryParse(temp, out id)) {
-                    Console.Write("Incorrect ID. Type again: ");
-                    temp = Console.ReadLine();
-                }
-                var trip = context.Trips.AsNoTracking().FirstOrDefault(t => t.TripId == id);
-                if (trip == null)
-                    throw new Exception("Element is not found.");
+                var id = GetEntityId();
+                var repository = new Repository<Trip>(new TripValidator());
+                var trip = repository.Read(id);
                 Console.WriteLine(trip);
             }
             catch (Exception ex) {
@@ -117,9 +95,8 @@ namespace ShipTransportations.Client
         {
             try {
                 Console.Write("Trips list.\n");
-                var trips = context.Trips.AsNoTracking().ToList();
-                if (trips.Count == 0) Console.WriteLine("No elements found.");
-                foreach (var trip in trips) {
+                var repository = new Repository<Trip>(new TripValidator());
+                foreach (var trip in repository.ReadAll()) {
                     Console.WriteLine(trip);
                 }
             }

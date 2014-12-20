@@ -7,14 +7,15 @@ namespace ShipTransportations.EF.Mapping
     {
         public CityMap()
         {
-            HasKey(t => t.CityId);
-
+            HasKey(t => t.Id);
+            HasMany(t => t.Ports)
+                .WithRequired(t => t.City).HasForeignKey(t => t.CityId);
             Property(t => t.Name)
                 .IsRequired()
                 .HasMaxLength(50);
 
             ToTable("City");
-            Property(t => t.CityId).HasColumnName("CityID");
+            Property(t => t.Id).HasColumnName("CityID");
             Property(t => t.Name).HasColumnName("Name");
         }
 
